@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Clans{% endblock title %}
+{% block style %}
+body{
+    
+    justify-content:start !important;
+}
+{% endblock style %}
+{% block content %}
+<h1 class="text-6xl mt-20 text-center mb-5" style="font-family: 'Tiny5', serif;"> Clans To Join </h1>
+<form method="get" class="mb-5" id="searchForm">
+    <input name="q" type="text" placeholder="Search for a clan..." autocomplete="off" autofocus="true" 
+           class="text-md w-full focus:outline-none focus:placeholder-gray-400 text-gray-100 placeholder-gray-600 pl-5 pr-16 border-2 border-gray-500 focus:border-blue-500 rounded-lg py-2 bg-transparent" 
+           id="searchInput" />
+</form>
+<div class="flex flex-col w-full items-center justify-center gap-5">
+
+    {% for clan in clans %}
+    <div class="flex h-[3em] w-[95%] items-center justify-center gap-2 rounded-lg bg-[#281C5A] p-[0.5rem]">
+        <p class="text-[1rem] text-center w-full font-semibold">{{clan.name}}</p>
+        <p class="text-sm text-center text-gray-300">{{ clan.members.count }}/50</p>
+        <button class="clan_modal px-3 cursor-pointer rounded-lg bg-[#445EF2]" data-clan-id="{{clan.id}}">Details</button>
+    </div>
+
+    <div id="clan_details_{{clan.id}}" class="hidden absolute top-[50%] -translate-y-[50%]  w-[90%]">
+        <form class="container" style="position: relative; z-index: 20;">
+            <div class="input-container">
+                <button style="position: absolute; z-index: 10; top: 15px; right: 15px; color: #fff;">X</button>
+                <div class="input-content">
+                    <div class="input-dist">
+                        <div class="input-type">
+                            <p class="text-[1rem] text-center w-full font-semibold">{{clan.name}}</p>
+                            <p class="text-sm text-center text-gray-300"><span class="font-semibold text-gray-400">Members :</span> {{ clan.members.count }}/50</p>
+                            <p class="text-sm text-center text-gray-300"><span class="font-semibold">Description :</span>  {{ clan.description }}</p>
+
+                            <button class="px-3 cursor-pointer rounded-lg bg-[#445EF2]">Ask to join</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endfor %}
+
+<!-- Combine the script into one block -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const buttons = document.querySelectorAll('.clan_modal'); // Select all elements with the 'clan_modal' class
+        buttons.forEach(btn => {
+            btn.onclick = () => {
+                const clanId = btn.getAttribute('data-clan-id'); // Get the clan ID from the button's data attribute
+                const detailsElement = document.getElementById('clan_details_' + clanId); // Find the corresponding details div
+                detailsElement.classList.toggle('hidden'); // Toggle the visibility
+                detailsElement.onclick = function (){
+                 detailsElement.classList.toggle('hidden'); // Toggle the visibility
+
+                }
+            };
+        });
+    });
+</script>
+
+</div>
+
+<script>
+    document.getElementById("searchForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent form submission
+        const searchValue = document.getElementById("searchInput").value.trim();
+        
+        if (searchValue) {
+            console.log("Searching for clan:", searchValue);
+            // You can send the search request here, like with a fetch or an AJAX request
+        }
+    });
+
+    document.getElementById("searchInput").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            // Trigger the form submission manually
+            document.getElementById("searchForm").submit();
+        }
+    });
+</script>
+
+
+
+{% endblock content %}

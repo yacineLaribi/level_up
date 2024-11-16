@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=El+Messiri:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Tiny5&display=swap');
+    
+    body {
+        font-family: "Poppins", sans-serif;
+        height: 100vh;
+        max-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #1D1340;
+        margin: 0;
+    }
+
+    #SubscribeTXT {
+        font-size: 20px;
+        color: #9fc4d0;
+        padding: 15px 0;
+    }
+
+    button {
+        color: #9fc4d0;
+        text-decoration: none;
+        font-size: 25px;
+        border: none;
+        background: none;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+        margin: 10px 0 0;
+    }
+
+    button::before {
+        margin-left: auto;
+    }
+
+    button::after, button::before {
+        content: '';
+        width: 0%;
+        height: 2px;
+        background: #06aed8;
+        display: block;
+        transition: 0.5s;
+    }
+
+    button:hover::after, button:hover::before {
+        width: 100%;
+    }
+
+    .container {
+        width: 100%;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-style: italic;
+        font-weight: bold;
+        display: flex;
+        margin: auto;
+        aspect-ratio: 16/9;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 1em;
+    }
+
+    .input-container {
+        animation: blinkShadowsFilter 8s ease-in infinite;
+    }
+
+    .input-content {
+        display: grid;
+        align-content: center;
+        justify-items: center;
+        align-items: center;
+        text-align: center;
+        padding-inline: 1em;
+        position: relative;
+    }
+
+    .input-content::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        filter: blur(40px);
+        -webkit-clip-path: polygon(26% 0, 66% 0, 92% 0, 100% 8%, 100% 89%, 91% 100%, 7% 100%, 0 92%, 0 0);
+        clip-path: polygon(26% 0, 66% 0, 92% 0, 100% 8%, 100% 89%, 91% 100%, 7% 100%, 0 92%, 0 0);
+        background: rgba(122, 251, 255, 0.5568627451);
+        transition: all 1s ease-in-out;
+    }
+
+    .input-content::after {
+        content: "";
+        position: absolute;
+        width: 98%;
+        height: 98%;
+        box-shadow: inset 0px 0px 20px 20px #212121;
+        background: repeating-linear-gradient(to bottom, transparent 0%, rgba(64, 144, 181, 0.6) 1px, rgb(0, 0, 0) 3px, hsl(295, 60%, 12%) 5px, #153544 4px, transparent 0.5%), repeating-linear-gradient(to left, hsl(295, 60%, 12%) 100%, hsla(295, 60%, 12%, 0.99) 100%);
+        -webkit-clip-path: polygon(26% 0, 31% 5%, 61% 5%, 66% 0, 92% 0, 100% 8%, 100% 89%, 91% 100%, 7% 100%, 0 92%, 0 0);
+        clip-path: polygon(26% 0, 31% 5%, 61% 5%, 66% 0, 92% 0, 100% 8%, 100% 89%, 91% 100%, 7% 100%, 0 92%, 0 0);
+        animation: backglitch 50ms linear infinite;
+    }
+
+    .input-dist {
+        z-index: 80;
+        display: grid;
+        align-items: center;
+        text-align: center;
+        width: 350px;
+        height: 500px;
+        padding-inline: 1em;
+        padding-block: 1.2em;
+        grid-template-columns: 1fr;
+    }
+
+    .input-type {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        gap: 1em;
+        font-size: 1.1rem;
+        background-color: transparent;
+        width: 100%;
+        border: none;
+    }
+
+    .input-is {
+        color: #fff;
+        font-size: 0.9rem;
+        background-color: transparent;
+        width: 100%;
+        box-sizing: border-box;
+        padding-inline: 0.5em;
+        padding-block: 0.7em;
+        border: none;
+        transition: all 1s ease-in-out;
+        border-bottom: 1px solid hsl(221, 26%, 43%);
+    }
+
+    .input-is:hover {
+        transition: all 1s ease-in-out;
+        background: linear-gradient(90deg, transparent 0%, rgba(102, 224, 255, 0.2) 27%, rgba(102, 224, 255, 0.2) 63%, transparent 100%);
+    }
+
+    .input-content:focus-within::before {
+        transition: all 1s ease-in-out;
+        background: hsla(0, 0%, 100%, 0.814);
+    }
+
+    .input-is:focus {
+        outline: none;
+        border-bottom: 1px solid hsl(192, 100%, 100%);
+        color: hsl(192, 100%, 88%);
+        background: linear-gradient(90deg, transparent 0%, rgba(102, 224, 255, 0.2) 27%, rgba(102, 224, 255, 0.2) 63%, transparent 100%);
+    }
+
+    .input-is::-moz-placeholder {
+        color: hsla(192, 100%, 88%, 0.806);
+    }
+
+    .input-is::placeholder {
+        color: hsla(192, 100%, 88%, 0.806);
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 768px) {
+        .container {
+            aspect-ratio: 4/3;
+        }
+
+        .input-dist {
+            width: 90%;
+            height: auto;
+            padding: 1em;
+        }
+
+        .input-is {
+            font-size: 1rem;
+            padding: 0.5em;
+        }
+
+        button {
+            font-size: 20px;
+        }
+
+        #SubscribeTXT {
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .input-dist {
+            width: 100%;
+            height: auto;
+            padding: 1em;
+        }
+
+        .input-type {
+            font-size: 1rem;
+        }
+
+        button {
+            font-size: 18px;
+        }
+
+        #SubscribeTXT {
+            font-size: 14px;
+        }
+    }
+
+    @keyframes backglitch {
+        0% {
+            box-shadow: inset 0px 20px 20px 30px #212121;
+        }
+
+        50% {
+            box-shadow: inset 0px -20px 20px 30px hsl(297, 42%, 10%);
+        }
+
+        to {
+            box-shadow: inset 0px 20px 20px 30px #212121;
+        }
+    }
+
+    @keyframes rotate {
+        0% {
+            transform: rotate(0deg) translate(-50%, 20%);
+        }
+
+        50% {
+            transform: rotate(180deg) translate(40%, 10%);
+        }
+
+        to {
+            transform: rotate(360deg) translate(-50%, 20%);
+        }
+    }
+
+
+</style>
+
+
+<body style="display: flex; align-items: center; justify-content: center; flex-direction: column;">
+    {% if not request.user.is_authentiated %}
+        <form action="" class="container">
+            {% csrf_token %}
+        <h1  style="color: #fff; font-size: 3rem; font-family: 'Tiny5', serif;">Level Up</h1>
+
+        <div class="input-container">
+            <div class="input-content">
+                <div class="input-dist">
+                <span id="SubscribeTXT">SIGNUP</span>
+                    <div class="input-type">
+                        <input name="username" placeholder="Username" required="true" type="text" class="input-is">  
+                        <input name="email" placeholder="Email" required="true" type="email" class="input-is">  
+                        <input name="password1" placeholder="Password" required="true" type="password" class="input-is">  
+                        <input name="password2" placeholder="Confirm Password" required="true" type="password" class="input-is">  
+                    </div>
+                    <p style="color: #fff; font-size: 13px;" >Already a member ? <a style="color: #06aed8; text-decoration: none;" href="{% url "core:login" %}">login</a></p>
+                    <button>SIGNUP</button>
+                </div>
+            </div>
+        </div>
+        </form>
+    {% endif %}
+
+</body>
+</html>
