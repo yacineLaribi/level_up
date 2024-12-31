@@ -17,4 +17,39 @@
         <span class="font-semibold text-center">Progress</span>
 
     </div>
+
+    <h1 class="font-bold text-3xl mb-5">Daily Quests</h1>
+        <form method="post" action="{% url 'core:complete_quests' %}" class="flex items-center justify-center gap-2 flex-col">
+            {% csrf_token %}
+            <ul class="flex items-center justify-center flex-col px-2 mt-2 gap-2">
+                {% for quest in quests %}
+                <label class="flex flex-row items-center gap-2.5 text-white">
+                    <li class="flex items-center justify-between gap-2 bg-[#281C5A] p-2 w-[90vw] rounded-lg">
+                        <div>
+                            <strong>{{ quest.name }}</strong>
+                            <p class="text-xs">{{ quest.description }}</p>
+                            <p class="text-xs">Rewards: {{ quest.score_reward }} points, {{ quest.gold_reward }} gold</p>
+                        </div>
+                        {% if quest.is_special %}
+                        <span>Special Quest!</span>
+                        {% endif %}
+                        <input
+                            type="checkbox"
+                            name="completed_quests"
+                            value="{{ quest.id }}"
+                            class="peer hidden"
+                        />
+                        <div class="h-5 w-5 flex rounded-md border border-[#a2a1a833] light:bg-[#e8e8e8] dark:bg-[#212121] peer-checked:bg-[#7152f3] transition">
+                            <svg fill="none" viewBox="0 0 24 24" class="w-5 h-5 light:stroke-[#e8e8e8] dark:stroke-[#212121]" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </div>
+                    </li>
+                </label>
+                {% endfor %}
+            </ul>
+            <button type="submit" class="mt-5 px-4 py-2 rounded-lg bg-blue-700 text-white">Submit Quests</button>
+        </form>
+        
+
 {% endblock content %}

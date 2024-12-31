@@ -4,10 +4,10 @@ from django.contrib.auth import authenticate, login ,logout
 from django.contrib import messages
 from .models import CustomUser as User
 
-@login_required
-def index(request):
-    context = {}
-    return render(request,'index.html',context)
+# @login_required
+# def index(request):
+#     context = {}
+#     return render(request,'index.html',context)
 
 
 def signup(request):
@@ -135,3 +135,53 @@ def clans(request):
     if q:
         clans = clans.filter(name__icontains=q) 
     return render(request, 'clans.html', {'clans': clans}) 
+
+
+from django.shortcuts import render
+from .models import Quest, UserQuest
+
+def index(request):
+    quests = Quest.objects.all()
+    user_quests = UserQuest.objects.filter(user=request.user)
+    completed_quests_ids = user_quests.filter(completed=True).values_list('quest_id', flat=True)  # Get IDs of completed quests
+    quests = Quest.objects.exclude(id__in=completed_quests_ids)  # Exclude quests already completed by the user
+    
+    return render(request, 'index.html', {
+        'quests': quests,
+        'user_quests': user_quests
+    })
+
+
+
+from django.shortcuts import redirect, get_object_or_404
+from .models import Quest, UserQuest
+
+def complete_quest(request, quest_id):
+    quest = get_object_or_404(Quest, id=quest_id)
+    user_quest, created = UserQuest.objects.get_or_create(user=request.user, quest=quest)
+    
+    if not user_quest.completed:
+        user_quest.completed = True
+        user_quest.save()
+    
+    return redirect('core:index') 
+
+
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
+
+@login_required
+@csrf_protect
+def complete_quests(request):
+    if request.method == 'POST':
+        completed_quest_ids = request.POST.getlist('completed_quests')  # Get selected quest IDs
+        for quest_id in completed_quest_ids:
+            # Mark the quest as completed for the user
+            quest = Quest.objects.get(id=quest_id)
+            UserQuest.objects.update_or_create(
+                user=request.user,
+                quest=quest,
+                defaults={'completed': True},
+            )
+        return redirect('core:index')  # Redirect to index page

@@ -5,7 +5,7 @@ admin.site.register(CustomUser)
 
 from django.contrib import admin
 from django.core.exceptions import ValidationError
-from .models import Clan, ClanMembership
+from .models import Clan, ClanMembership , Quest , UserQuest
 
 
 
@@ -40,3 +40,17 @@ class ClanAdmin(admin.ModelAdmin):
 class ClanMembershipAdmin(admin.ModelAdmin):
     list_display = ('user', 'clan', 'joined_at')
     search_fields = ('user__username', 'clan__name')
+
+
+
+@admin.register(Quest)
+class QuestAdmin(admin.ModelAdmin):
+    list_display = ('name', 'score_reward', 'gold_reward', 'is_special', 'created_at')
+    search_fields = ['name']  # Corrected: Made this a list
+    list_filter = ['is_special', 'created_at']  # Corrected: Made this a list
+
+@admin.register(UserQuest)
+class UserQuestAdmin(admin.ModelAdmin):
+    list_display = ('user', 'quest', 'completed', 'completed_at')
+    search_fields = ['user__username', 'quest__name']  # Corrected: Made this a list
+    list_filter = ['completed']  # Corrected: Made this a list

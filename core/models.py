@@ -45,3 +45,23 @@ class ClanMembership(models.Model):
     def __str__(self):
         return f'{self.user.username} - {self.clan.name}'
 
+
+class Quest(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    score_reward = models.IntegerField()  # Score awarded for completing the quest
+    gold_reward = models.IntegerField(default=0)  # Optional gold reward
+    is_special = models.BooleanField(default=False)  # Special quest flag
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+class UserQuest(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user_quests")
+    quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name="user_quests")
+    completed = models.BooleanField(default=False)
+    completed_at = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.quest.name}"
